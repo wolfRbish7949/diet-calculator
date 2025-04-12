@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Hostel Mess Diet Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+    <style>
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .admin-controls {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .admin-badge {
+            background-color: #0071bc;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .logout-btn {
+            background-color: transparent;
+            border: 1px solid #e0e0e0;
+            color: #757575;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+        
+        .logout-btn:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="admin-header">
+                <h1>Hostel Mess Diet Calculator</h1>
+                <div class="admin-controls">
+                    <span class="admin-badge">Admin</span>
+                    <button id="logout-btn" class="logout-btn">Logout</button>
+                </div>
+            </div>
+            <p>Manage student diet records and expenses</p>
+        </header>
+
+        <main>
+            <section class="form-section">
+                <h2>Add Diet Record</h2>
+                <form id="diet-form">
+                    <div class="form-group">
+                        <label for="student-name">Student Name</label>
+                        <input type="text" id="student-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="student-email">Email</label>
+                        <input type="email" id="student-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="meal-time">Meal Time</label>
+                        <select id="meal-time" required>
+                            <option value="">Select Meal</option>
+                            <option value="Breakfast">Breakfast</option>
+                            <option value="Lunch">Lunch</option>
+                            <option value="Dinner">Dinner</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="charge">Charge (₹)</label>
+                        <input type="number" id="charge" min="0" step="0.01" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Add Record</button>
+                </form>
+            </section>
+
+            <section class="records-section">
+                <div class="records-header">
+                    <h2>Diet Records</h2>
+                    <div class="search-container">
+                        <label for="search-input"></label><input type="text" id="search-input" placeholder="Search by name or email...">
+                        <button id="search-btn" class="btn-secondary">Search</button>
+                        <button id="clear-search-btn" class="btn-secondary">Clear</button>
+                    </div>
+                    <div class="filter-options">
+                        <label for="filter-period"></label><select id="filter-period">
+                            <option value="all">All Records</option>
+                            <option value="day">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                        </select>
+                        <button id="export-btn" class="btn-secondary">Export to Excel</button>
+                        <button id="email-btn" class="btn-secondary">Email Report</button>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table id="records-table">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Email</th>
+                                <th>Date</th>
+                                <th>Meal Time</th>
+                                <th>Charge (₹)</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="records-body">
+                            <!-- Diet records will be inserted here -->
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4">Total</td>
+                                <td id="total-charge">₹0.00</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </section>
+
+            <section class="analytics-section">
+                <h2>Expense Analytics</h2>
+                <div class="charts-container">
+                    <div class="chart-card">
+                        <h3>Meal Distribution</h3>
+                        <canvas id="meal-chart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Weekly Expenses</h3>
+                        <canvas id="weekly-chart"></canvas>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Hostel Mess Diet Calculator &copy; 2023</p>
+        </footer>
+    </div>
+
+    <!-- Modals -->
+    <div id="email-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Email Report</h2>
+            <p id="email-status">Sending report to <span id="email-display"></span>...</p>
+            <div class="email-options">
+                <button id="confirm-email" class="btn-primary">Send</button>
+                <button id="cancel-email" class="btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin-script.js"></script>
+</body>
+</html> 

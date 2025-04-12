@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Hostel Mess Diet Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --saffron: #F9A826;
+            --tomato: #E74C3C;
+            --olive: #58D68D;
+            --light-bg: #FFF9F0;
+            --dark-text: #34495E;
+            --light-text: #7F8C8D;
+        }
+        
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--light-bg);
+            background-image: url('data:image/svg+xml;charset=utf8,%3Csvg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="20" cy="20" r="3" fill="%23F9A82620"/%3E%3Ccircle cx="60" cy="60" r="3" fill="%23E74C3C20"/%3E%3Ccircle cx="80" cy="40" r="3" fill="%2358D68D20"/%3E%3C/svg%3E');
+            margin: 0;
+            padding: 0;
+            color: var(--dark-text);
+        }
+        
+        .login-container {
+            max-width: 450px;
+            margin: 50px auto;
+            padding: 2.5rem;
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--saffron), var(--tomato), var(--olive));
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+        
+        .logo h1 {
+            color: var(--tomato);
+            margin-bottom: 0.5rem;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 700;
+            font-size: 2rem;
+        }
+        
+        .logo p {
+            color: var(--light-text);
+            font-size: 1.1rem;
+        }
+        
+        .logo::after {
+            content: "🍛";
+            font-size: 2rem;
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.7;
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 0;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #ECF0F1;
+            border-radius: 10px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--saffron);
+            box-shadow: 0 0 0 3px rgba(249, 168, 38, 0.15);
+        }
+        
+        .error-message {
+            color: var(--tomato);
+            font-size: 0.875rem;
+            margin-top: 1rem;
+            text-align: center;
+            display: none;
+            background-color: rgba(231, 76, 60, 0.1);
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        .login-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #ECF0F1;
+        }
+
+        .login-tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.9rem 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--light-text);
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .login-tab.active {
+            color: var(--saffron);
+        }
+        
+        .login-tab.active::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background-color: var(--saffron);
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .btn-primary {
+            background-color: var(--tomato);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 10px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary:hover {
+            background-color: #D44637;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.2);
+        }
+        
+        .btn-primary::after {
+            content: "";
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            top: -10px;
+            right: -10px;
+            transition: all 0.5s;
+        }
+        
+        .btn-primary:hover::after {
+            transform: scale(4);
+            opacity: 0;
+        }
+
+        .admin-section {
+            position: relative;
+            margin-top: 2.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px dashed #ECF0F1;
+            text-align: center;
+        }
+
+        .admin-toggle {
+            font-size: 0.9rem;
+            color: var(--olive);
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            background-color: rgba(88, 214, 141, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .admin-toggle:hover {
+            background-color: rgba(88, 214, 141, 0.2);
+        }
+
+        .admin-login-form {
+            display: none;
+            margin-top: 1.5rem;
+        }
+
+        #admin-login-container.show .admin-login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Register Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+        
+        .modal.show {
+            display: flex;
+            animation: modalFadeIn 0.3s;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background-color: #fff;
+            padding: 2.5rem;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .modal-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--saffron), var(--tomato), var(--olive));
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--tomato);
+            font-family: 'Raleway', sans-serif;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--light-text);
+            transition: all 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: var(--tomato);
+            transform: rotate(90deg);
+        }
+        
+        .register-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .register-option {
+            padding: 1.2rem;
+            border: 2px solid #ECF0F1;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .register-option::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            transition: all 0.3s;
+        }
+        
+        #student-register-option::before {
+            background-color: var(--saffron);
+        }
+        
+        #admin-register-option::before {
+            background-color: var(--olive);
+        }
+        
+        .register-option:hover {
+            border-color: transparent;
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        #student-register-option:hover {
+            background-color: rgba(249, 168, 38, 0.05);
+        }
+        
+        #admin-register-option:hover {
+            background-color: rgba(88, 214, 141, 0.05);
+        }
+        
+        .option-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        #student-register-option .option-title::before {
+            content: "🍲";
+        }
+        
+        #admin-register-option .option-title::before {
+            content: "🍳";
+        }
+        
+        .option-desc {
+            font-size: 0.9rem;
+            color: var(--light-text);
+            margin-top: 0.4rem;
+            margin-left: 1.85rem;
+        }
+        
+        .register-icon {
+            color: var(--light-text);
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .register-option:hover .register-icon {
+            transform: translateX(5px);
+        }
+        
+        /* Register Forms */
+        .register-form-container {
+            display: none;
+        }
+        
+        .register-form-container.show {
+            display: block;
+            animation: slideIn 0.3s;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .register-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+        }
+        
+        .btn-back {
+            background-color: transparent;
+            border: 2px solid #ECF0F1;
+            color: var(--light-text);
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-back:hover {
+            background-color: #ECF0F1;
+            color: var(--dark-text);
+        }
+        
+        /* Food illustrations */
+        .food-illustrations {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .food-icon {
+            position: absolute;
+            opacity: 0.07;
+            transform-origin: center;
+            animation: float 8s infinite ease-in-out;
+        }
+        
+        .chapati {
+            top: 15%;
+            right: 10%;
+            font-size: 2.5rem;
+            animation-delay: 0s;
+        }
+        
+        .rice {
+            bottom: 20%;
+            left: 10%;
+            font-size: 2.5rem;
+            animation-delay: 1s;
+        }
+        
+        .curry {
+            bottom: 30%;
+            right: 15%;
+            font-size: 2.5rem;
+            animation-delay: 2s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 20px;
+            margin-top: 25px;
+            transition: transform 0.3s ease;
+        }
+        
+        .contact-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .contact-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .contact-header::before {
+            content: "📞";
+            font-size: 1.5rem;
+        }
+        
+        .contact-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .contact-card {
+            background-color: var(--light-blue);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.2s ease;
+        }
+        
+        .contact-card:hover {
+            transform: translateX(5px);
+        }
+        
+        .contact-card.email::before {
+            content: "📧";
+            font-size: 1.5rem;
+        }
+        
+        .contact-card.phone::before {
+            content: "📱";
+            font-size: 1.5rem;
+        }
+        
+        .contact-details {
+            flex: 1;
+        }
+        
+        .contact-label {
+            font-size: 0.9rem;
+            color: var(--light-text);
+            margin-bottom: 3px;
+        }
+        
+        .contact-value {
+            font-weight: 600;
+            color: var(--sky-blue);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="food-illustrations">
+            <div class="food-icon chapati" aria-hidden="true">🫓</div>
+            <div class="food-icon rice" aria-hidden="true">🍚</div>
+            <div class="food-icon curry" aria-hidden="true">🍛</div>
+        </div>
+        
+        <div class="logo">
+            <h1>DIET CHARGE CALCULATOR</h1>
+            <p>Login to continue your meal journey</p>
+        </div>
+        
+        <div class="login-tabs">
+            <div class="login-tab active" id="student-tab" role="tab" aria-selected="true">Student Login</div>
+        </div>
+        
+        <form id="student-login-form" class="login-form" aria-labelledby="student-tab">
+            <div class="form-group">
+                <label for="student-name">Student Name</label>
+                <input type="text" id="student-name" required placeholder="Enter your name">
+            </div>
+            
+            <div class="form-group">
+                <label for="student-email">Email</label>
+                <input type="email" id="student-email" required placeholder="Enter your email">
+            </div>
+            
+            <div class="error-message" id="student-error-message" role="alert">
+                Please enter both name and email to continue.
+            </div>
+            
+            <button type="submit" class="btn-primary">Login & Get Meal Records</button>
+            
+            <div style="text-align: center; margin-top: 0.75rem;">
+                <a href="#" id="register-link" style="color: var(--saffron); text-decoration: none; font-size: 0.95rem; font-weight: 600;">
+                    New user? Register here
+                </a>
+            </div>
+        </form>
+        
+        <div class="admin-section" id="admin-login-container">
+            <a class="admin-toggle" id="admin-toggle" role="button" aria-expanded="false" aria-controls="admin-login-form">Admin Login</a>
+            
+            <form id="admin-login-form" class="admin-login-form" aria-labelledby="admin-toggle">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required placeholder="Admin username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required placeholder="Admin password">
+                </div>
+                
+                <div class="error-message" id="admin-error-message" role="alert">
+                    Invalid username or password. Please try again.
+                </div>
+                
+                <button type="submit" class="btn-primary">Admin Login</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Register Modal -->
+    <div id="register-modal" class="modal" role="dialog" aria-labelledby="register-modal-title" aria-hidden="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="register-modal-title">Join Our Mess</div>
+                <button class="close-modal" aria-label="Close modal">&times;</button>
+            </div>
+            
+            <!-- Register Options -->
+            <div id="register-options" class="register-options">
+                <div class="register-option" id="student-register-option" role="button" tabindex="0">
+                    <div>
+                        <div class="option-title">Register as Student</div>
+                        <div class="option-desc">Track your mess expenses & meal plans</div>
+                    </div>
+                    <div class="register-icon">›</div>
+                </div>
+                
+                <div class="register-option" id="admin-register-option" role="button" tabindex="0">
+                    <div>
+                        <div class="option-title">Register as Admin</div>
+                        <div class="option-desc">Manage mess records & meal calculations</div>
+                    </div>
+                    <div class="register-icon">›</div>
+                </div>
+            </div>
+            
+            <!-- Student Register Form -->
+            <div id="student-register-form-container" class="register-form-container">
+                <form id="student-register-form" class="register-form">
+                    <div class="form-group">
+                        <label for="new-student-name">Full Name</label>
+                        <input type="text" id="new-student-name" required placeholder="Your full name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new-student-email">Email</label>
+                        <input type="email" id="new-student-email" required placeholder="Your email address">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="student-roll">Roll Number</label>
+                        <input type="text" id="student-roll" required placeholder="Your college roll number">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="student-hostel">Hostel Name</label>
+                        <input type="text" id="student-hostel" required placeholder="Your hostel name">
+                    </div>
+                    
+                    <div class="error-message" id="student-register-error" role="alert">
+                        Please fill all fields to register.
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-back" id="student-register-back">Back</button>
+                        <button type="submit" class="btn-primary">Register</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Admin Register Form -->
+            <div id="admin-register-form-container" class="register-form-container">
+                <form id="admin-register-form" class="register-form">
+                    <div class="form-group">
+                        <label for="admin-name">Full Name</label>
+                        <input type="text" id="admin-name" required placeholder="Your full name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="admin-email">Email</label>
+                        <input type="email" id="admin-email" required placeholder="Your email address">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new-username">Username</label>
+                        <input type="text" id="new-username" required placeholder="Choose a username">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new-password">Password</label>
+                        <input type="password" id="new-password" required placeholder="Create a password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" required placeholder="Confirm your password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="admin-code">Admin Code</label>
+                        <input type="password" id="admin-code" required placeholder="Enter admin authorization code">
+                    </div>
+                    
+                    <div class="error-message" id="admin-register-error" role="alert">
+                        Please fill all fields to register.
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-back" id="admin-register-back">Back</button>
+                        <button type="submit" class="btn-primary">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <section class="contact-section">
+        <div class="contact-header">
+            <h2>Contact Us</h2>
+        </div>
+        <div class="contact-info">
+            <div class="contact-card email">
+                <div class="contact-details">
+                    <div class="contact-label">Email</div>
+                    <div class="contact-value">rj19bishnoi29@gmail.com</div>
+                </div>
+            </div>
+            <div class="contact-card phone">
+                <div class="contact-details">
+                    <div class="contact-label">Phone</div>
+                    <div class="contact-value">+91 7976709249</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Toggle admin login form
+        document.getElementById('admin-toggle').addEventListener('click', function() {
+            const adminContainer = document.getElementById('admin-login-container');
+            adminContainer.classList.toggle('show');
+            
+            // Toggle ARIA expanded state
+            const expanded = adminContainer.classList.contains('show');
+            this.setAttribute('aria-expanded', expanded);
+        });
+
+        // Student login form handling
+        document.getElementById('student-login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const studentName = document.getElementById('student-name').value.trim();
+            const studentEmail = document.getElementById('student-email').value.trim();
+            
+            if (studentName && studentEmail) {
+                // Save student info to localStorage
+                localStorage.setItem('currentStudent', studentName);
+                localStorage.setItem('currentEmail', studentEmail);
+                
+                try {
+                    // Redirect to student view
+                    window.location.href = 'student-view.html';
+                } catch (error) {
+                    console.error('Navigation error:', error);
+                    document.getElementById('student-error-message').textContent = 'Navigation error. Please try again.';
+                    document.getElementById('student-error-message').style.display = 'block';
+                }
+            } else {
+                // Show error message
+                document.getElementById('student-error-message').style.display = 'block';
+            }
+        });
+        
+        // Admin login form handling
+        document.getElementById('admin-login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Simple admin authentication
+            if (username === 'admin' && password === 'admin123') {
+                // Set admin session
+                localStorage.setItem('isAdminLoggedIn', 'true');
+                
+                try {
+                    // Redirect to admin dashboard
+                    window.location.href = 'index.html';
+                } catch (error) {
+                    console.error('Navigation error:', error);
+                    document.getElementById('admin-error-message').textContent = 'Navigation error. Please try again.';
+                    document.getElementById('admin-error-message').style.display = 'block';
+                }
+            } else {
+                // Show error message
+                document.getElementById('admin-error-message').style.display = 'block';
+            }
+        });
+        
+        // Register Modal
+        const registerModal = document.getElementById('register-modal');
+        const registerLink = document.getElementById('register-link');
+        const closeModal = document.querySelector('.close-modal');
+        
+        // Register Options
+        const registerOptions = document.getElementById('register-options');
+        const studentRegisterOption = document.getElementById('student-register-option');
+        const adminRegisterOption = document.getElementById('admin-register-option');
+        
+        // Register Forms
+        const studentRegisterFormContainer = document.getElementById('student-register-form-container');
+        const adminRegisterFormContainer = document.getElementById('admin-register-form-container');
+        const studentRegisterBack = document.getElementById('student-register-back');
+        const adminRegisterBack = document.getElementById('admin-register-back');
+        
+        // Open register modal
+        registerLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            registerModal.classList.add('show');
+            registerOptions.style.display = 'flex';
+            studentRegisterFormContainer.classList.remove('show');
+            adminRegisterFormContainer.classList.remove('show');
+        });
+        
+        // Close register modal
+        closeModal.addEventListener('click', function() {
+            registerModal.classList.remove('show');
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target === registerModal) {
+                registerModal.classList.remove('show');
+            }
+        });
+        
+        // Show student register form
+        studentRegisterOption.addEventListener('click', function() {
+            registerOptions.style.display = 'none';
+            studentRegisterFormContainer.classList.add('show');
+        });
+        
+        // Show admin register form
+        adminRegisterOption.addEventListener('click', function() {
+            registerOptions.style.display = 'none';
+            adminRegisterFormContainer.classList.add('show');
+        });
+        
+        // Back to register options from student form
+        studentRegisterBack.addEventListener('click', function() {
+            studentRegisterFormContainer.classList.remove('show');
+            registerOptions.style.display = 'flex';
+        });
+        
+        // Back to register options from admin form
+        adminRegisterBack.addEventListener('click', function() {
+            adminRegisterFormContainer.classList.remove('show');
+            registerOptions.style.display = 'flex';
+        });
+        
+        // Handle student registration form
+        document.getElementById('student-register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('new-student-name').value.trim();
+            const email = document.getElementById('new-student-email').value.trim();
+            const roll = document.getElementById('student-roll').value.trim();
+            const hostel = document.getElementById('student-hostel').value.trim();
+            
+            if (name && email && roll && hostel) {
+                // Save to localStorage
+                const students = JSON.parse(localStorage.getItem('registeredStudents') || '[]');
+                
+                students.push({
+                    name,
+                    email,
+                    roll,
+                    hostel,
+                    registeredAt: new Date().toISOString()
+                });
+                
+                localStorage.setItem('registeredStudents', JSON.stringify(students));
+                
+                // Auto login
+                localStorage.setItem('currentStudent', name);
+                localStorage.setItem('currentEmail', email);
+                
+                alert('Registration successful! Redirecting to student dashboard.');
+                try {
+                    window.location.href = 'student-view.html';
+                } catch (error) {
+                    console.error('Navigation error:', error);
+                    document.getElementById('student-register-error').textContent = 'Navigation error. Please try again.';
+                    document.getElementById('student-register-error').style.display = 'block';
+                }
+            } else {
+                document.getElementById('student-register-error').style.display = 'block';
+            }
+        });
+        
+        // Handle admin registration form
+        document.getElementById('admin-register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('admin-name').value.trim();
+            const email = document.getElementById('admin-email').value.trim();
+            const username = document.getElementById('new-username').value.trim();
+            const password = document.getElementById('new-password').value.trim();
+            const confirmPassword = document.getElementById('confirm-password').value.trim();
+            const adminCode = document.getElementById('admin-code').value.trim();
+            
+            // Check if admin code is correct
+            if (adminCode !== 'hostel1234') {
+                alert('Invalid admin code! Please contact the system administrator.');
+                return;
+            }
+            
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            if (name && email && username && password) {
+                // Save to localStorage
+                const admins = JSON.parse(localStorage.getItem('registeredAdmins') || '[]');
+                
+                admins.push({
+                    name,
+                    email,
+                    username,
+                    password,
+                    registeredAt: new Date().toISOString()
+                });
+                
+                localStorage.setItem('registeredAdmins', JSON.stringify(admins));
+                
+                // Auto login
+                localStorage.setItem('isAdminLoggedIn', 'true');
+                localStorage.setItem('currentAdmin', username);
+                
+                alert('Admin registration successful! Redirecting to admin dashboard.');
+                try {
+                    window.location.href = 'index.html';
+                } catch (error) {
+                    console.error('Navigation error:', error);
+                    document.getElementById('admin-register-error').textContent = 'Navigation error. Please try again.';
+                    document.getElementById('admin-register-error').style.display = 'block';
+                }
+            } else {
+                document.getElementById('admin-register-error').style.display = 'block';
+            }
+        });
+
+        // Register Options keyboard accessibility
+        studentRegisterOption.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.click();
+            }
+        });
+        
+        adminRegisterOption.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.click();
+            }
+        });
+        
+        // Ensure modal can be closed with Escape key
+        window.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && registerModal.classList.contains('show')) {
+                registerModal.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html> 
