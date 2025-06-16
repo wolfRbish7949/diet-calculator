@@ -1,5 +1,6 @@
-# Hostel Mess Diet Calculator
+# diet kal-C
 
+Hostel Mess Diet Calculator
 A simple web application for hostel students to track their mess diet charges and generate reports.
 
 ## Features
